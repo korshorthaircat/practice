@@ -1,4 +1,4 @@
-package _202212;
+package _202212_;
 
 class MyTest implements Runnable{
     @Override

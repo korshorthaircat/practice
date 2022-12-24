@@ -1,4 +1,4 @@
-package _202212;
+package _202212_;
 
 public class Lambda004 {
     @FunctionalInterface //이 어노테이션을 붙일 경우 컴파일러가 함수형 인터페이스의 조건에 맞는지 검사해준다.(추상메서드가 단 하나)

@@ -1,7 +1,5 @@
-package _202212;
+package _202212_;
 
-import java.util.Arrays;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 public class MethodReference002 {

@@ -1,8 +1,6 @@
-package _202212;
+package _202212_;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.stream.Stream;
 
 public class Stream001 {
     public static void main(String[] args) {

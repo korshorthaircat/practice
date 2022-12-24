@@ -1,4 +1,4 @@
-package _202212;
+package _202212_;
 
 public class Lambda003 {
 
