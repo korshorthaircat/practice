@@ -1,14 +1,15 @@
 package _202302_;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CollectPractice5 {
     /**
      * 연습
-     * Collectors.groupingBy()
      * Collectors.partitioningBy()
      */
     public static void main(String[] args) {
@@ -38,17 +39,44 @@ public class CollectPractice5 {
         System.out.println("femaleStudentScoreSum = " + studentScoreSumBySex.get(false));
 
 
-        /**
-         * 그룹화 - 스트림의 요소를 특정 기준(Function)으로 그룹화
-         * Collectors.groupingBy()
-         *
-         * Collector groupingBy(Function classifier)
-         * Collector groupingBy(Function classifier, Collector downstream)
-         * Collector groupingBy(Function classifier, Supplier mapFactory, Collector downstream)
-         */
+        Map<Boolean, Optional<Student>> topScoreStudentBySex = Stream.of(arr)
+                .collect(Collectors.partitioningBy(Student::isMale, Collectors.maxBy(Comparator.comparing(Student::getScore))));
+        Optional<Student> topScoreMaleStudent = topScoreStudentBySex.get(true);
+        Optional<Student> topScoreFemaleStudent = topScoreStudentBySex.get(false);
+        System.out.println("topScoreFemaleStudent = " + topScoreFemaleStudent);
+        System.out.println("topScoreMaleStudent = " + topScoreMaleStudent);
+        //결과
+//        femaleStudentTopScore = Optional[Student{name='김지미', isMale=false, hak=1, ban=1, score=250}]
+//        maleStudentTopScore = Optional[Student{name='나자바', isMale=true, hak=1, ban=1, score=300}]
 
+        Map<Boolean, Student> topScoreStudentBySex2 = Stream.of(arr)
+                .collect(Collectors.partitioningBy(
+                                Student::isMale,
+                                Collectors.collectingAndThen(
+                                        Collectors.maxBy(Comparator.comparingInt(Student::getScore)), Optional::get
+                                )
+                        )
+                );
+        Student topScoreMaleStudent2 = topScoreStudentBySex2.get(true);
+        Student topScoreFemaleStudent2 = topScoreStudentBySex2.get(false);
+        System.out.println("topScoreFemaleStudent2 = " + topScoreFemaleStudent2);
+        System.out.println("topScoreMaleStudent2 = " + topScoreMaleStudent2);
+        //결과
+//        topScoreFemaleStudent2 = Student{name='김지미', isMale=false, hak=1, ban=1, score=250}
+//        topScoreMaleStudent2 = Student{name='나자바', isMale=true, hak=1, ban=1, score=300}
 
-
+        //이중분할
+        Map<Boolean, Map<Boolean, List<Student>>> failedStudent = Stream.of(arr)
+                .collect(
+                        Collectors.partitioningBy(Student::isMale,
+                                Collectors.partitioningBy(student -> student.getScore() < 150)
+                        )
+                );
+        Map<Boolean, List<Student>> failedStudentBySex = failedStudent.get(true);
+        List<Student> failedMaleStudent = failedStudentBySex.get(true);
+        List<Student> failedFemaleStudent = failedStudentBySex.get(false);
+        System.out.println("failedFemaleStudent = " + failedFemaleStudent);
+        System.out.println("failedMaleStudent = " + failedMaleStudent);
     }
 
     static Student[] arr = {
